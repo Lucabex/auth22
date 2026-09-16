@@ -12,10 +12,10 @@ public class JwtService
     private readonly IConfiguration _config;
     private readonly SymmetricSecurityKey _key;
 
-    public JwtService(IConfiguration config,SymmetricSecurityKey key)
+    public JwtService(IConfiguration config)
     {
         _config=config;
-        var secretKey = _config["JwtService:SecretKey"];
+        var secretKey = _config["JwtSettings:SecretKey"];
         _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey!));
     }
 
