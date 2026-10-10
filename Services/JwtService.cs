@@ -24,14 +24,14 @@ public class JwtService
         var claims = new[]
         {
             new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
-            new Claim(ClaimTypes.Name,user.UserName ),
+            new Claim(ClaimTypes.Name,user.UserName),
             new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString())
         };
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
-            Audience = _config["JwtSettings:"],
+            Audience = _config["JwtSettings:Audience"],
             Issuer = _config["JwtSettings:Issuer"],
             Expires = DateTime.UtcNow.AddMinutes(Convert.ToDouble(_config["JwtSettings:ExpInMinutes"])),
             SigningCredentials = new SigningCredentials(_key,SecurityAlgorithms.HmacSha256)

@@ -13,12 +13,23 @@ builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHttpClient();
+
 builder.Services.AddDbContext<AppDbContext>(Options =>
 {
     Options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 var jwt= builder.Configuration.GetSection("JwtSettings");
 var secretKey=jwt["SecretKey"];
+builder.Services.AddCors(options =>
+{
+options.AddPolicy("react", policy=>{
+    policy.WithOrigins(
+    "http://localhost:5173")
+    .AllowAnyHeader()
+    .AllowAnyMethod();
+    
+    });
+    });
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -47,7 +58,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.MapSwaggerUI();
 }
-
+app.UseCors("react");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
